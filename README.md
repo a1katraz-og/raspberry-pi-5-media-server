@@ -1,84 +1,88 @@
-````markdown
+<div align="center">
+
 # 🏠 Raspberry Pi 5 Media Server
 
-A production-ready, self-hosted media server stack powered by **Docker Compose** and designed for the **Raspberry Pi 5 (8GB)**.
+**A production-ready, self-hosted media automation stack for the Raspberry Pi 5 (8GB)**
 
-This repository contains Docker Compose files, application configurations, scripts, and documentation to deploy, maintain, and back up a complete media automation ecosystem.
+Docker Compose · Jellyfin · Sonarr · Radarr · Prowlarr · qBittorrent · Gluetun VPN
 
----
+[![Platform](https://img.shields.io/badge/platform-Raspberry%20Pi%205-c51a4a?logo=raspberrypi&logoColor=white)](#)
+[![Docker](https://img.shields.io/badge/deployed%20with-Docker%20Compose-2496ED?logo=docker&logoColor=white)](#)
+[![VPN](https://img.shields.io/badge/traffic-VPN%20secured-success?logo=wireguard&logoColor=white)](#)
+[![License](https://img.shields.io/badge/license-MIT-blue)](#-license)
 
-# ✨ Features
-
-- 🎬 Jellyfin Media Server
-- 🔍 Jellyseerr Request Management
-- 🎞️ Radarr Movie Automation
-- 📺 Sonarr TV Show Automation
-- 🌐 Prowlarr Indexer Management
-- ⬇️ qBittorrent Download Client
-- 🔒 Gluetun VPN Gateway (WireGuard/OpenVPN)
-- 📝 Bazarr Subtitle Automation *(Optional)*
-- 🔄 Watchtower Automatic Updates *(Optional)*
-- 🖥️ Portainer Docker Management *(Optional)*
-- 📦 Docker Compose Deployment
-- 💾 Persistent Volumes
-- 🔐 Secure VPN Kill Switch
-- 📂 Organized Directory Structure
-- 🔄 Easy Backup & Restore
-- 🚀 Lightweight and optimized for Raspberry Pi 5
+</div>
 
 ---
 
-# 🏗️ Architecture
+## 📋 Table of Contents
 
-```text
-                                         Internet
-                                             │
-                        ┌────────────────────┴────────────────────┐
-                        │                                         │
-                   Indexers                                 Jellyfin Clients
-                        │                                         │
-                        ▼                                         ▼
-                  +--------------+                      +----------------+
-                  |   Prowlarr   |                      |    Jellyfin    |
-                  +--------------+                      +----------------+
-                          │                                     ▲
-             ┌────────────┴────────────┐                        │
-             ▼                         ▼                        │
-      +--------------+          +--------------+               │
-      |    Sonarr    |          |    Radarr    |               │
-      +--------------+          +--------------+               │
-             │                         │                       │
-             └──────────────┬──────────┘                       │
-                            │                                  │
-                            ▼                                  │
-                    +----------------+                         │
-                    |  qBittorrent   |                         │
-                    +----------------+                         │
-                            │                                  │
-                network_mode: service:gluetun                  │
-                            │                                  │
-                            ▼                                  │
-                    +----------------+                         │
-                    |    Gluetun     |─────────────────────────┘
-                    | VPN Gateway    |
-                    +----------------+
-                            │
-                      WireGuard/OpenVPN
-                            │
-                            ▼
-                        VPN Provider
-                            │
-                            ▼
-                         Internet
+- [Features](#-features)
+- [Architecture](#️-architecture)
+- [Repository Structure](#-repository-structure)
+- [Hardware](#️-hardware)
+- [Services](#-services)
+- [Network Architecture](#-network-architecture)
+- [VPN Architecture](#-vpn-architecture)
+- [Media & Downloads Layout](#-media-layout)
+- [Volume Mapping](#-volume-mapping)
+- [Environment Variables](#️-environment-variables)
+- [Installation](#-installation)
+- [Startup Order](#-startup-order)
+- [Service Integration Flow](#-service-integration)
+- [Useful Docker Commands](#️-useful-docker-commands)
+- [Backup Strategy](#-backup-strategy)
+- [Security Recommendations](#-security-recommendations)
+- [Future Improvements](#-future-improvements)
+- [Troubleshooting](#-troubleshooting)
+- [Resource Usage](#-resource-usage-typical)
+- [License](#-license)
+- [Acknowledgements](#️-acknowledgements)
+
+---
+
+## ✨ Features
+
+| | | |
+|---|---|---|
+| 🎬 **Jellyfin** — Media streaming | 🔍 **Jellyseerr** — Request management | 🎞️ **Radarr** — Movie automation |
+| 📺 **Sonarr** — TV automation | 🌐 **Prowlarr** — Indexer management | ⬇️ **qBittorrent** — Download client |
+| 🔒 **Gluetun** — VPN gateway (WireGuard/OpenVPN) | 📝 **Bazarr** — Subtitle automation *(optional)* | 🔄 **Watchtower** — Auto-updates *(optional)* |
+| 🖥️ **Portainer** — Docker management *(optional)* | 🔐 Secure VPN kill switch | 💾 Persistent volumes & easy backup/restore |
+
+> Lightweight, organized, and optimized to run comfortably on a Raspberry Pi 5.
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart TB
+    INT[("🌐 Internet")]
+    IDX["Indexers"]
+    CLIENTS["📱 Jellyfin Clients"]
+
+    IDX --> PRO["Prowlarr"]
+    PRO --> SON["Sonarr"]
+    PRO --> RAD["Radarr"]
+    SON --> QB["qBittorrent"]
+    RAD --> QB
+    QB -. "network_mode: service:gluetun" .-> GLU["Gluetun VPN Gateway"]
+    GLU -- "WireGuard / OpenVPN" --> INT
+    JEL["Jellyfin"] --> CLIENTS
+    QB --> JEL
+
+    style GLU fill:#1a1a2e,stroke:#e94560,color:#fff
+    style QB fill:#16213e,stroke:#0f3460,color:#fff
+    style JEL fill:#00b4d8,stroke:#0077b6,color:#fff
 ```
 
 ---
 
-# 📁 Repository Structure
+## 📁 Repository Structure
 
 ```text
 media-server/
-│
 ├── README.md
 ├── LICENSE
 ├── .env.example
@@ -96,30 +100,9 @@ media-server/
 │   ├── watchtower.yml
 │   └── portainer.yml
 │
-├── configs/
-│   ├── gluetun/
-│   ├── qbittorrent/
-│   ├── prowlarr/
-│   ├── sonarr/
-│   ├── radarr/
-│   ├── bazarr/
-│   ├── jellyfin/
-│   ├── jellyseerr/
-│   ├── watchtower/
-│   └── portainer/
-│
-├── media/
-│   ├── movies/
-│   ├── tv/
-│   ├── anime/
-│   ├── music/
-│   └── photos/
-│
-├── downloads/
-│   ├── complete/
-│   ├── incomplete/
-│   └── torrents/
-│
+├── configs/            # Per-service persistent config
+├── media/              # movies / tv / anime / music / photos
+├── downloads/           # complete / incomplete / torrents
 ├── backups/
 │
 ├── scripts/
@@ -139,123 +122,109 @@ media-server/
 
 ---
 
-# 🖥️ Hardware
+## 🖥️ Hardware
 
 | Component | Recommendation |
-|-----------|---------------|
-| Raspberry Pi | Pi 5 (8GB) |
-| OS | Raspberry Pi OS Lite (64-bit) |
-| Storage | 64GB SSD or NVMe |
-| Media Storage | External SSD/HDD |
-| Cooling | Active Cooler |
-| Network | Gigabit Ethernet |
-| Power Supply | Official 27W USB-C |
+|---|---|
+| 🍓 Raspberry Pi | Pi 5 (8GB) |
+| 💽 OS | Raspberry Pi OS Lite (64-bit) |
+| 💾 Storage | 64GB SSD or NVMe |
+| 🗄️ Media Storage | External SSD/HDD |
+| ❄️ Cooling | Active Cooler |
+| 🔌 Network | Gigabit Ethernet |
+| ⚡ Power Supply | Official 27W USB-C |
 
 ---
 
-# 🐳 Services
+## 🐳 Services
 
 | Service | Purpose |
-|----------|---------|
-| Jellyfin | Media Streaming |
-| Jellyseerr | Media Requests |
-| Sonarr | TV Automation |
-| Radarr | Movie Automation |
-| Prowlarr | Indexer Management |
-| qBittorrent | Download Client |
-| Gluetun | VPN Gateway |
-| Bazarr | Subtitle Automation |
-| Watchtower | Automatic Updates |
-| Portainer | Docker UI |
+|---|---|
+| **Jellyfin** | Media streaming |
+| **Jellyseerr** | Media requests |
+| **Sonarr** | TV automation |
+| **Radarr** | Movie automation |
+| **Prowlarr** | Indexer management |
+| **qBittorrent** | Download client |
+| **Gluetun** | VPN gateway |
+| **Bazarr** | Subtitle automation |
+| **Watchtower** | Automatic updates |
+| **Portainer** | Docker UI |
 
 ---
 
-# 🌐 Network Architecture
+## 🌐 Network Architecture
 
-```text
-                    Docker Bridge Network
-                            │
-     ┌──────────────────────┼──────────────────────────┐
-     │                      │                          │
-     │                  Jellyfin                  Jellyseerr
-     │
-     ├── Sonarr
-     ├── Radarr
-     ├── Prowlarr
-     ├── Bazarr
-     │
-     ├──────────────────────────────────────────────┐
-     │                                              │
-     ▼                                              ▼
-+----------------+                       +-------------------+
-|    Gluetun     |<----------------------|   qBittorrent     |
-|  VPN Gateway   |   network_mode:service|                   |
-+----------------+                       +-------------------+
+```mermaid
+flowchart TB
+    subgraph BRIDGE["Docker Bridge Network"]
+        JEL["Jellyfin"]
+        JSE["Jellyseerr"]
+        SON["Sonarr"]
+        RAD["Radarr"]
+        PRO["Prowlarr"]
+        BAZ["Bazarr"]
+        GLU["Gluetun VPN Gateway"]
+        QB["qBittorrent<br/>(network_mode: service:gluetun)"]
+    end
+
+    SON --- PRO
+    RAD --- PRO
+    BAZ --- PRO
+    QB <--> GLU
+    JSE --> JEL
+
+    style GLU fill:#1a1a2e,stroke:#e94560,color:#fff
+    style QB fill:#16213e,stroke:#0f3460,color:#fff
 ```
 
 ---
 
-# 🔒 VPN Architecture
+## 🔒 VPN Architecture
 
-All torrent traffic passes exclusively through Gluetun.
+All torrent traffic passes **exclusively** through Gluetun.
 
-```text
-qBittorrent
-      │
-      ▼
- Docker Network
-      │
-      ▼
-  Gluetun VPN
-      │
-Encrypted Tunnel
-      │
-      ▼
- VPN Provider
-      │
-      ▼
- Torrent Peers
+```mermaid
+flowchart LR
+    QB["qBittorrent"] --> DN["Docker Network"]
+    DN --> GLU["Gluetun VPN<br/>🔒 Encrypted Tunnel"]
+    GLU --> VPN["VPN Provider"]
+    VPN --> PEERS["Torrent Peers"]
+
+    style GLU fill:#1a1a2e,stroke:#e94560,color:#fff
 ```
 
-Benefits:
+**Benefits:**
 
-- VPN Kill Switch
-- DNS Leak Protection
-- IPv6 Leak Protection
-- Automatic VPN Reconnect
-- Secure Torrent Traffic
-- No Direct Internet Access for qBittorrent
+- ✅ VPN kill switch
+- ✅ DNS leak protection
+- ✅ IPv6 leak protection
+- ✅ Automatic VPN reconnect
+- ✅ Secure torrent traffic
+- ✅ No direct internet access for qBittorrent
 
 ---
 
-# 📂 Media Layout
+## 📂 Media Layout
 
 ```text
 media/
-
 ├── movies/
-│   ├── Movie Name (2026)
-│   │   └── Movie.mkv
-│
+│   └── Movie Name (2026)/
+│       └── Movie.mkv
 ├── tv/
-│   ├── Show Name/
-│   │   ├── Season 01/
-│   │   └── Season 02/
-│
+│   └── Show Name/
+│       ├── Season 01/
+│       └── Season 02/
 ├── anime/
-│
 ├── music/
-│
 └── photos/
 ```
 
----
-
-# 📦 Downloads Layout
+## 📦 Downloads Layout
 
 ```text
 downloads/
-
 ├── complete/
 ├── incomplete/
 └── torrents/
@@ -263,21 +232,21 @@ downloads/
 
 ---
 
-# 💾 Volume Mapping
+## 💾 Volume Mapping
 
 | Host Path | Container Path |
-|------------|----------------|
-| configs/ | /config |
-| downloads/ | /downloads |
-| media/movies | /movies |
-| media/tv | /tv |
-| media/music | /music |
+|---|---|
+| `configs/` | `/config` |
+| `downloads/` | `/downloads` |
+| `media/movies` | `/movies` |
+| `media/tv` | `/tv` |
+| `media/music` | `/music` |
 
 ---
 
-# ⚙️ Environment Variables
+## ⚙️ Environment Variables
 
-Create `.env` from `.env.example`
+Create `.env` from `.env.example`:
 
 ```env
 TZ=Asia/Kolkata
@@ -290,7 +259,6 @@ MEDIA_PATH=/srv/media
 DOWNLOAD_PATH=/srv/downloads
 
 # Gluetun
-
 VPN_SERVICE_PROVIDER=your-provider
 VPN_TYPE=wireguard
 
@@ -302,63 +270,48 @@ SERVER_COUNTRIES=India
 
 ---
 
-# 🚀 Installation
+## 🚀 Installation
 
-## Clone Repository
+**1. Clone the repository**
 
 ```bash
 git clone https://github.com/<username>/media-server.git
-
 cd media-server
 ```
 
----
-
-## Configure Environment
+**2. Configure environment**
 
 ```bash
 cp .env.example .env
+# then edit .env with your values
 ```
 
-Update the variables according to your environment.
-
----
-
-## Start the Stack
+**3. Start the stack**
 
 ```bash
 docker compose up -d
 ```
 
----
-
-## Stop
+<details>
+<summary><strong>Other lifecycle commands</strong></summary>
 
 ```bash
+# Stop
 docker compose down
-```
 
----
-
-## Restart
-
-```bash
+# Restart
 docker compose restart
-```
 
----
-
-## Update Containers
-
-```bash
+# Update containers
 docker compose pull
-
 docker compose up -d
 ```
 
+</details>
+
 ---
 
-# 🔄 Startup Order
+## 🔄 Startup Order
 
 1. Gluetun
 2. qBittorrent
@@ -373,139 +326,80 @@ docker compose up -d
 
 ---
 
-# 🔗 Service Integration
+## 🔗 Service Integration
 
-```text
-Indexers
-    │
-    ▼
-Prowlarr
-    │
-    ├──────────────┐
-    ▼              ▼
-Sonarr         Radarr
-    │              │
-    └──────┬───────┘
-           ▼
-    qBittorrent
-           │
-     (via Gluetun)
-           │
-           ▼
-      Downloads
-           │
-           ▼
-     Media Library
-           │
-           ▼
-      Jellyfin
-           ▲
-           │
-      Jellyseerr
+```mermaid
+flowchart TB
+    IDX["Indexers"] --> PRO["Prowlarr"]
+    PRO --> SON["Sonarr"]
+    PRO --> RAD["Radarr"]
+    SON --> QB["qBittorrent"]
+    RAD --> QB
+    QB -- "via Gluetun" --> DL["Downloads"]
+    DL --> LIB["Media Library"]
+    LIB --> JEL["Jellyfin"]
+    JSE["Jellyseerr"] --> JEL
 ```
 
 ---
 
-# 🛠️ Useful Docker Commands
+## 🛠️ Useful Docker Commands
 
-Running Containers
-
-```bash
-docker ps
-```
-
-Container Logs
-
-```bash
-docker logs jellyfin
-```
-
-```bash
-docker logs qbittorrent
-```
-
-```bash
-docker logs gluetun
-```
-
-Restart One Service
-
-```bash
-docker compose restart jellyfin
-```
-
-Pull Latest Images
-
-```bash
-docker compose pull
-```
-
-Recreate Containers
-
-```bash
-docker compose up -d
-```
-
-Docker Disk Usage
-
-```bash
-docker system df
-```
-
-Clean Unused Images
-
-```bash
-docker image prune
-```
-
-Disk Usage
-
-```bash
-df -h
-```
+| Task | Command |
+|---|---|
+| Running containers | `docker ps` |
+| View logs | `docker logs jellyfin` / `docker logs qbittorrent` / `docker logs gluetun` |
+| Restart one service | `docker compose restart jellyfin` |
+| Pull latest images | `docker compose pull` |
+| Recreate containers | `docker compose up -d` |
+| Docker disk usage | `docker system df` |
+| Clean unused images | `docker image prune` |
+| Host disk usage | `df -h` |
 
 ---
 
-# 💾 Backup Strategy
+## 💾 Backup Strategy
 
-Backup regularly:
+**Back up regularly:**
 
-- configs/
-- docker-compose.yml
-- .env
-- scripts/
-- databases
-- media (optional depending on storage)
+- `configs/`
+- `docker-compose.yml`
+- `.env`
+- `scripts/`
+- Databases
+- Media *(optional, depending on storage)*
 
-Recommended schedule:
+**Recommended schedule:**
 
-- Daily configuration backups
-- Weekly full backups
-- Monthly offsite backup
-
----
-
-# 🔐 Security Recommendations
-
-- Never expose qBittorrent directly to the internet.
-- Route all torrent traffic through Gluetun.
-- Use WireGuard whenever supported.
-- Keep all Docker images updated.
-- Use strong passwords.
-- Enable HTTPS through a reverse proxy.
-- Restrict external access.
-- Store secrets in `.env`.
-- Schedule regular backups.
-- Keep Raspberry Pi OS updated.
+| Frequency | Scope |
+|---|---|
+| Daily | Configuration backups |
+| Weekly | Full backups |
+| Monthly | Offsite backup |
 
 ---
 
-# 🚀 Future Improvements
+## 🔐 Security Recommendations
 
-- [ ] Traefik Reverse Proxy
+- 🚫 Never expose qBittorrent directly to the internet
+- 🔒 Route all torrent traffic through Gluetun
+- 🛡️ Use WireGuard whenever supported
+- 🔄 Keep all Docker images updated
+- 🔑 Use strong passwords
+- 🌐 Enable HTTPS through a reverse proxy
+- 🚧 Restrict external access
+- 🗝️ Store secrets in `.env`
+- 💾 Schedule regular backups
+- ⬆️ Keep Raspberry Pi OS updated
+
+---
+
+## 🚀 Future Improvements
+
+- [ ] Traefik reverse proxy
 - [ ] Nginx Proxy Manager
-- [ ] Homepage Dashboard
-- [ ] Tailscale Remote Access
+- [ ] Homepage dashboard
+- [ ] Tailscale remote access
 - [ ] Cloudflare Tunnel
 - [ ] Grafana
 - [ ] Prometheus
@@ -513,75 +407,79 @@ Recommended schedule:
 - [ ] Uptime Kuma
 - [ ] Immich
 - [ ] Nextcloud
-- [ ] Automatic Backups
-- [ ] SSD Health Monitoring
-- [ ] UPS Monitoring
-- [ ] Discord Notifications
-- [ ] Telegram Notifications
+- [ ] Automatic backups
+- [ ] SSD health monitoring
+- [ ] UPS monitoring
+- [ ] Discord notifications
+- [ ] Telegram notifications
 
 ---
 
-# ❗ Troubleshooting
+## ❗ Troubleshooting
 
-## Container won't start
+<details>
+<summary><strong>Container won't start</strong></summary>
 
 ```bash
 docker logs <container-name>
 ```
 
-## Permission Issues
+</details>
+
+<details>
+<summary><strong>Permission issues</strong></summary>
 
 ```bash
 sudo chown -R 1000:1000 configs/
 ```
 
 Verify:
+- `PUID` / `PGID`
+- Folder ownership
 
-- PUID
-- PGID
-- Folder Ownership
+</details>
 
----
-
-## Jellyfin Cannot See Media
+<details>
+<summary><strong>Jellyfin cannot see media</strong></summary>
 
 Verify:
-
 - Volume mappings
 - Folder permissions
 - Library configuration
 
----
+</details>
 
-## Sonarr/Radarr Import Issues
+<details>
+<summary><strong>Sonarr/Radarr import issues</strong></summary>
 
 Check:
-
 - Download paths
-- Remote Path Mapping
-- Completed Download Handling
+- Remote path mapping
+- Completed download handling
 
----
+</details>
 
-## VPN Not Connected
+<details>
+<summary><strong>VPN not connected</strong></summary>
 
 ```bash
 docker logs gluetun
 ```
 
 Verify:
-
 - WireGuard credentials
-- VPN Provider
+- VPN provider
 - Firewall rules
 - Internet connectivity
 
+</details>
+
 ---
 
-# 📈 Resource Usage (Typical)
+## 📈 Resource Usage (Typical)
 
 | Service | RAM | CPU |
-|----------|----:|----:|
+|---|---:|---:|
 | Jellyfin | 300–500 MB | Low |
 | Jellyseerr | 150–250 MB | Very Low |
 | Sonarr | 250–400 MB | Low |
@@ -591,29 +489,24 @@ Verify:
 | Gluetun | 50–100 MB | Very Low |
 | Docker Overhead | ~200 MB | Minimal |
 
-**Typical idle RAM usage:** **2–3 GB**
+> **Typical idle RAM usage: 2–3 GB**
 
 ---
 
-# 📄 License
+## 📄 License
 
 MIT License
 
 ---
 
-# ❤️ Acknowledgements
+## ❤️ Acknowledgements
 
 Special thanks to the communities behind:
 
-- Jellyfin
-- Jellyseerr
-- Sonarr
-- Radarr
-- Prowlarr
-- qBittorrent
-- Gluetun
-- Bazarr
-- LinuxServer.io
-- Docker
-- Raspberry Pi Foundation
-````
+Jellyfin · Jellyseerr · Sonarr · Radarr · Prowlarr · qBittorrent · Gluetun · Bazarr · LinuxServer.io · Docker · Raspberry Pi Foundation
+
+<div align="center">
+
+⭐ If this stack helped you, consider giving the repo a star!
+
+</div>
