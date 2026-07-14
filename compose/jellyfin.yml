@@ -7,7 +7,7 @@ services:
     volumes:
       - ${CONFIG_PATH}:/config
       - ${CACHE_PATH}:/cache
-      - ${MEDIA_PATH}:/media
+      - ${MEDIA_PATH}/Movies:/Movies
       # - ${MEDIA_PATH}/tv:/data/tv
       # - ${MEDIA_PATH}/anime:/data/anime
       # - ${MEDIA_PATH}/music:/data/music
