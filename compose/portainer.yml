@@ -7,7 +7,7 @@ services:
       # - 8000:8000  # Remove if you do not intend to use Edge Agents
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${CONFIG_PATH}/portainer:/data
+      - /portainer:/data
     restart: unless-stopped
     networks:
       - media_network
