@@ -31,13 +31,14 @@ networks:
 
 include:
   - compose/nextcloud.yml
-  # - compose/gluetun.yml
-  # - compose/qbittorrent.yml
-  # - compose/prowlarr.yml
-  # - compose/sonarr.yml
-  # - compose/radarr.yml
-  # - compose/bazarr.yml
-  # - compose/jellyfin.yml
-  # - compose/jellyseerr.yml
-  # - compose/watchtower.yml
-  # - compose/portainer.yml
+  - compose/nginx-proxy.yml
+  - compose/gluetun.yml
+  - compose/qbittorrent.yml
+  - compose/prowlarr.yml
+  - compose/sonarr.yml
+  - compose/radarr.yml
+  - compose/bazarr.yml
+  - compose/jellyfin.yml
+  - compose/jellyseerr.yml
+  - compose/watchtower.yml
+  - compose/portainer.yml
