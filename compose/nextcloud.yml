@@ -45,7 +45,7 @@ services:
       - app
     volumes:
       # https://docs.nextcloud.com/server/latest/admin_manual/installation/nginx.html
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro 
+      - ./configs/nginx.conf:/etc/nginx/nginx.conf:ro 
     volumes_from:
       - app
 
