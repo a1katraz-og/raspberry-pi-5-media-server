@@ -9,7 +9,7 @@ services:
       - WEBUI_PORT=8701
     volumes:
       - ./config:/config
-      - ${DOWNLOAD_PATH}:/downloads
+      - ${DOWNLOAD_PATH}:/Downloads
     # No direct network of its own — all traffic routes through Gluetun.
     # Do not add a `networks:` or `ports:` key here; both are inherited
     # from the gluetun container's network namespace.
