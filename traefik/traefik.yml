@@ -23,6 +23,6 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik/letsencrypt:/letsencrypt
+      - ./letsencrypt:/letsencrypt
     networks:
       - homelab_network

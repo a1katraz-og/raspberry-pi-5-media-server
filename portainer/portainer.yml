@@ -7,7 +7,7 @@ services:
       # - 8000:8000  # Remove if you do not intend to use Edge Agents
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /portainer:/data
+      - /data:/data
     restart: unless-stopped
     networks:
       - homelab_network

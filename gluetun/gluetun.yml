@@ -15,14 +15,19 @@ services:
       - SERVER_COUNTRIES=United States
       - TZ=${TZ}
     ports:
-      # qBittorrent WebUI + traffic (published here since qbittorrent
-      # shares gluetun's network namespace via network_mode)
-      - 8888:8888/tcp
-      - 8388:8388/tcp # Shadowsocks
-      #- "6881:6881"
-      #- "6881:6881/udp"
+      # - 8888:8888/tcp
+      # - 8388:8388/tcp # Shadowsocks
+      - 6881:6881/udp
+      - 8701:8701   # qBittorrent Web UI
+      - 6881:6881   # torrent port
+      - 7878:7878   # Radarr
+      - 8989:8989   # Sonarr
+      # - 8686:8686   # Lidarr
+      # - 6767:6767   # Bazarr
+      - 9696:9696   # Prowlarr
+      - 8191:8191   # FlareSolverr
     volumes:
-      - ${CONFIG_PATH}/gluetun:/gluetun
+      - ./appdata:/appdata
     restart: unless-stopped
     networks:
       - homelab_network

@@ -7,7 +7,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${CONFIG_PATH}/radarr:/config
+      - ./config:/config
       - ${MEDIA_PATH}/movies:/movies
       - ${DOWNLOAD_PATH}:/downloads
     ports:

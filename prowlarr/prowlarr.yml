@@ -7,7 +7,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${CONFIG_PATH}/prowlarr:/config
+      - ./config:/config
     ports:
       - "9696:9696"
     restart: unless-stopped

@@ -7,7 +7,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${CONFIG_PATH}/bazarr:/config
+      - ./bazarr-config:/config
       - ${MEDIA_PATH}/movies:/movies
       - ${MEDIA_PATH}/tv:/tv
     ports:

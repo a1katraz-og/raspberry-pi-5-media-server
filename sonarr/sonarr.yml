@@ -7,7 +7,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${CONFIG_PATH}/sonarr:/config
+      - ./config:/config
       - ${MEDIA_PATH}/tv:/tv
       - ${DOWNLOAD_PATH}:/downloads
     ports:

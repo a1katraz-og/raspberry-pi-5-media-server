@@ -5,8 +5,8 @@ services:
     user: ${PUID}:${PGID}
       # - TZ=${TZ}
     volumes:
-      - ${CONFIG_PATH}:/config
-      - ${CACHE_PATH}:/cache
+      - ./jellyfin-config:/config
+      - ./jellyfin-cache:/cache
       - ${MEDIA_PATH}/Movies:/Movies
       # - ${MEDIA_PATH}/tv:/data/tv
       # - ${MEDIA_PATH}/anime:/data/anime
