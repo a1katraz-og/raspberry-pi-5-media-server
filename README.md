@@ -205,7 +205,6 @@ docker compose up -d
 
 ## 🚀 Future Improvements
 
-- [ ] Traefik reverse proxy
 - [ ] Nginx Proxy Manager
 - [ ] Homepage dashboard
 - [ ] Tailscale remote access
@@ -215,12 +214,9 @@ docker compose up -d
 - [ ] Loki
 - [ ] Uptime Kuma
 - [ ] Immich
-- [ ] Nextcloud
 - [ ] Automatic backups
 - [ ] SSD health monitoring
-- [ ] UPS monitoring
 - [ ] Discord notifications
-- [ ] Telegram notifications
 
 ---
 
