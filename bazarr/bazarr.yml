@@ -10,11 +10,9 @@ services:
       - ./bazarr-config:/config
       - ${MEDIA_PATH}/movies:/movies
       - ${MEDIA_PATH}/tv:/tv
-    ports:
-      - "6767:6767"
+    # ports:
+      # - "6767:6767"
     restart: unless-stopped
-    networks:
-      - homelab_network
+    network_mode: "service:gluetun"
     depends_on:
-      - sonarr
-      - radarr
+      - gluetun

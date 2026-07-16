@@ -23,11 +23,9 @@ services:
       - 7878:7878   # Radarr
       - 8989:8989   # Sonarr
       # - 8686:8686   # Lidarr
-      # - 6767:6767   # Bazarr
+      - 6767:6767   # Bazarr
       - 9696:9696   # Prowlarr
       - 8191:8191   # FlareSolverr
     volumes:
       - ./appdata:/appdata
     restart: unless-stopped
-    networks:
-      - homelab_network

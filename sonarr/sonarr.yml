@@ -10,11 +10,9 @@ services:
       - ./config:/config
       - ${MEDIA_PATH}/tv:/tv
       - ${DOWNLOAD_PATH}:/downloads
-    ports:
-      - "8989:8989"
+    # ports:
+      # - "8989:8989"
     restart: unless-stopped
-    networks:
-      - homelab_network
+    network_mode: "service:gluetun"
     depends_on:
-      - prowlarr
-      - qbittorrent
+      - gluetun

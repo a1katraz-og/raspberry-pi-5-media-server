@@ -8,8 +8,9 @@ services:
       - TZ=${TZ}
     volumes:
       - ./config:/config
-    ports:
-      - "9696:9696"
+    # ports:
+      # - "9696:9696"
     restart: unless-stopped
-    networks:
-      - homelab_network
+    network_mode: "service:gluetun"
+    depends_on:
+      - gluetun

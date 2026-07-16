@@ -6,7 +6,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - WEBUI_PORT=8080
+      - WEBUI_PORT=8701
     volumes:
       - ./config:/config
       - ${DOWNLOAD_PATH}:/downloads
@@ -15,5 +15,5 @@ services:
     # from the gluetun container's network namespace.
     network_mode: "service:gluetun"
     depends_on:
-      gluetun:
+      - gluetun
     restart: unless-stopped
