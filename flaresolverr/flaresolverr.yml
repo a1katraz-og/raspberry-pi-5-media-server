@@ -4,7 +4,7 @@ services:
     container_name: flaresolverr
     network_mode: "service:gluetun"  # Routes all traffic through Gluetun
     environment:
-      - TZ=${TIMEZONE}
+      - TZ=${TZ}
     depends_on:
       - gluetun
     # ports:
