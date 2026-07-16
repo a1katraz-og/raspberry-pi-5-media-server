@@ -21,7 +21,7 @@ services:
       # Uncomment this if IPv6 is not enabled on your host
       # DISABLE_IPV6: 'true'
     networks:
-      - media_network
+      - homelab_network
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt

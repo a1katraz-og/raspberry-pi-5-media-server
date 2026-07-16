@@ -24,7 +24,7 @@ services:
       - ${CONFIG_PATH}/gluetun:/gluetun
     restart: unless-stopped
     networks:
-      - media_network
+      - homelab_network
     healthcheck:
       test: ["CMD", "wget", "-qO-", "https://ipinfo.io/ip", "-T", "10"]
       interval: 60s

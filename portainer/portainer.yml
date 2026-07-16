@@ -10,4 +10,4 @@ services:
       - /portainer:/data
     restart: unless-stopped
     networks:
-      - media_network
+      - homelab_network

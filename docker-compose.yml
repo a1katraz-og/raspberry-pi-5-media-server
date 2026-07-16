@@ -1,45 +1,27 @@
 #
 #
 # This file wires together the shared network and pulls in every
-# service definition from ./compose/*.yml using the Compose "include"
+# service definition from ./<service-name>/*.yml using the Compose "include"
 # key (requires Docker Compose v2.20+ / `docker compose version`).
-#
-# If your Compose version is older and does not support `include:`,
-# start the stack instead with:
-#
-#   docker compose \
-#     -f compose/gluetun.yml \
-#     -f compose/qbittorrent.yml \
-#     -f compose/prowlarr.yml \
-#     -f compose/sonarr.yml \
-#     -f compose/radarr.yml \
-#     -f compose/bazarr.yml \
-#     -f compose/jellyfin.yml \
-#     -f compose/jellyseerr.yml \
-#     -f compose/watchtower.yml \
-#     -f compose/portainer.yml \
-#     up -d
-#
-
-name: media-server
+name: homelab
 
 networks:
-  media_network:
-    name: media_network
+  homelab_network:
+    name: homelab_network
     driver: bridge
 
 include:
-  - compose/nextcloud.yml
-  - compose/nginx-proxy.yml
-  - compose/gluetun.yml
-  - compose/qbittorrent.yml
-  - compose/prowlarr.yml
-  - compose/sonarr.yml
-  - compose/radarr.yml
-  - compose/bazarr.yml
-  - compose/jellyfin.yml
-  - compose/jellyseerr.yml
-  - compose/watchtower.yml
-  - compose/portainer.yml
-  - compose/homarr.yml
-  - compose/traefik.yml
+  - nextcloud/nextcloud.yml
+  - nginx-proxy/nginx-proxy.yml
+  - gluetun/gluetun.yml
+  - qbittorrent/qbittorrent.yml
+  - prowlarr/prowlarr.yml
+  - sonarr/sonarr.yml
+  - radarr/radarr.yml
+  - bazarr/bazarr.yml
+  - jellyfin/jellyfin.yml
+  - jellyseerr/jellyseerr.yml
+  - watchtower/watchtower.yml
+  - portainer/portainer.yml
+  - homarr/homarr.yml
+  - traefik/traefik.yml

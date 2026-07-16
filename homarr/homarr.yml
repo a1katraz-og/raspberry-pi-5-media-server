@@ -17,4 +17,4 @@ services:
     ports:
       - '7575:7575'
     networks:
-      - media_network
+      - homelab_network

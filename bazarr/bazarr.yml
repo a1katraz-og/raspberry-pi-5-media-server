@@ -14,7 +14,7 @@ services:
       - "6767:6767"
     restart: unless-stopped
     networks:
-      - media_network
+      - homelab_network
     depends_on:
       - sonarr
       - radarr

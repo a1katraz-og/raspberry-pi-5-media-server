@@ -23,4 +23,4 @@ services:
     #   - /dev/dri:/dev/dri
     restart: unless-stopped
     networks:
-      - media_network
+      - homelab_network

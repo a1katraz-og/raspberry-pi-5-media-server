@@ -14,7 +14,7 @@ services:
       - "7878:7878"
     restart: unless-stopped
     networks:
-      - media_network
+      - homelab_network
     depends_on:
       - prowlarr
       - qbittorrent

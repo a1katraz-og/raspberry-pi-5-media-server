@@ -12,7 +12,6 @@
 
 ## 📋 Table of Contents
 
-- [Repository Structure](#-repository-structure)
 - [Services](#-services)
 - [VPN Architecture](#-vpn-architecture)
 - [Environment Variables](#️-environment-variables)
@@ -24,38 +23,6 @@
 - [Troubleshooting](#-troubleshooting)
 - [Resource Usage](#-resource-usage-typical)
 
-
----
-
-
-## 📁 Repository Structure
-
-```text
-media-server/
-├── README.md
-├── LICENSE
-├── .env.example
-├── docker-compose.yml
-│
-├── compose/
-│   ├── gluetun.yml
-│   ├── qbittorrent.yml
-│   ├── prowlarr.yml
-│   ├── sonarr.yml
-│   ├── radarr.yml
-│   ├── bazarr.yml
-│   ├── jellyfin.yml
-│   ├── jellyseerr.yml
-│   ├── watchtower.yml
-│   └── portainer.yml
-│
-├── configs/            # Per-service persistent config
-├── media/              # movies / tv / anime / music / photos
-├── downloads/           # complete / incomplete / torrents
-├── backups/
-├── scripts/
-└── docs/
-```
 
 ---
 
