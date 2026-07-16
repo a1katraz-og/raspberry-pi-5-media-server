@@ -8,7 +8,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ./config:/config
-      - ${MEDIA_PATH}/tv:/tv
+      - ${MEDIA_PATH}/TV:/TV
       - ${DOWNLOAD_PATH}:/downloads
     # ports:
       # - "8989:8989"
