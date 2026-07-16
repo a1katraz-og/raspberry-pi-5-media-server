@@ -1,3 +1,4 @@
+# Only for Debian
 # Install the prerequisites:
 
 sudo apt install curl gnupg2 ca-certificates lsb-release debian-archive-keyring
