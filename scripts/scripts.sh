@@ -9,3 +9,7 @@ sudo docker exec -u www-data media-server-app-1 php occ app:enable files_externa
 mkdir -p traefik/letsencrypt
 touch traefik/letsencrypt/acme.json
 chmod 600 traefik/letsencrypt/acme.json
+
+#Fix for permission issue for jellyfin
+
+sudo chown -R $(id -u):$(id -g) jellyfin-config jellyfin-cache
