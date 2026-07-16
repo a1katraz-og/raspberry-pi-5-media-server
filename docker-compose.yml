@@ -1,5 +1,4 @@
 #
-# Raspberry Pi 5 Media Server — Root Compose File
 #
 # This file wires together the shared network and pulls in every
 # service definition from ./compose/*.yml using the Compose "include"
@@ -31,7 +30,7 @@ networks:
 
 include:
   - compose/nextcloud.yml
-  # - compose/nginx-proxy.yml
+  - compose/nginx-proxy.yml
   - compose/gluetun.yml
   - compose/qbittorrent.yml
   - compose/prowlarr.yml
@@ -42,3 +41,4 @@ include:
   - compose/jellyseerr.yml
   - compose/watchtower.yml
   - compose/portainer.yml
+  - compose/homarr.yml
