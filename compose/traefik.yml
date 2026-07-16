@@ -7,8 +7,20 @@ services:
       - "--api.insecure=true" #Do not enable this flag in production
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
+      #Only for setting DNS
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      #Change according to DNS provider
+      - "--certificatesresolvers.godaddy.acme.email=${EMAIL}"
+      - "--certificatesresolvers.godaddy.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.godaddy.acme.dnschallenge.provider=godaddy"
+    environment:
+      GODADDY_API_KEY: ${GODADDY_API_KEY}
+      GODADDY_API_SECRET: ${GODADDY_API_SECRET}
     ports:
       - "80:80"
       - "8080:8080"
+      - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/letsencrypt:/letsencrypt
