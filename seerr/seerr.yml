@@ -4,7 +4,7 @@ services:
     container_name: seerr
     environment:
       - TZ=${TZ}
-      - PORT=5055 #optional
+      # - PORT=5055 #optional
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.seerr.rule=Host(`seerr.${DOMAIN}`)"
